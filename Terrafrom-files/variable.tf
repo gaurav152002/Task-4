@@ -7,3 +7,5 @@ variable "env" {}
 
 ##=== EC2 module variables ===##
 variable "instance_type" {}
+
+

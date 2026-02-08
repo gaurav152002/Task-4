@@ -1,19 +1,15 @@
 #===== security group for EC2 instance =====#
 resource "aws_security_group" "ec2_sg" {
-    vpc_id = var.vpc_id  
+    vpc_id = var.vpc_id    
 
+    # ===== Allow Strapi traffic only from ALB =====
     ingress {
-        from_port = 22
-        to_port = 22
-        protocol = "tcp"
-        cidr_blocks = ["10.0.0.0/16"]
+        from_port       = 1337
+        to_port         = 1337
+        protocol        = "tcp"
+        security_groups = [var.alb_sg_id]       
         }
-    ingress {
-        from_port = 1337
-        to_port = 1337
-        protocol = "tcp"
-        cidr_blocks = ["10.0.0.0/16"]
-        }    
+
      egress {
         from_port = 0
         to_port = 0
@@ -21,7 +17,7 @@ resource "aws_security_group" "ec2_sg" {
         cidr_blocks = ["0.0.0.0/0"]
         }
     tags = {
-        Name = "${var.env}--ec2 security group"
+        Name = "dev--ec2 security group"
     }
 }
 
@@ -34,6 +30,13 @@ resource "aws_instance" "this" {
     vpc_security_group_ids = [aws_security_group.ec2_sg.id]
     
     user_data = file("${path.module}/userdata.sh")
+
+    root_block_device {
+    volume_size = 20
+    volume_type = "gp3"
+    }
+
+    #===== Temperory adjust =====#
 
     tags = {
         Name = "Strapi-ec2-instance"

@@ -18,7 +18,7 @@ resource "aws_subnet" "public" {
     availability_zone = "us-east-1a"
 
     tags = {
-      name = "${var.env}--public subnet"
+      name = "dev--public subnet"
     }
 }
 
@@ -30,7 +30,7 @@ resource "aws_subnet" "public_2" {
   availability_zone       = "us-east-1b"
 
   tags = {
-    Name = "${var.env}-public-subnet-2"
+    Name = "dev-public-subnet-2"
   }
 }
 
@@ -42,7 +42,7 @@ resource "aws_subnet" "private" {
     availability_zone = "us-east-1a"
 
     tags = {
-      name = "${var.env}--private subnet"
+      name = "dev--private subnet"
     }
 }
 
@@ -52,7 +52,7 @@ resource "aws_subnet" "private" {
 resource "aws_internet_gateway" "this" {
     vpc_id = aws_vpc.this.id
     tags = {
-      name = "${var.env}--internet gateway"
+      name = "dev--internet gateway"
   }
 }
 
@@ -65,7 +65,7 @@ resource "aws_route_table" "public" {
         gateway_id = aws_internet_gateway.this.id
     }
     tags = {
-      name = "${var.env}--public route table"
+      name = "dev--public route table"
     }
 }
 
@@ -86,7 +86,7 @@ resource "aws_route_table_association" "public_2" {
 resource "aws_eip" "nat" {
     domain = "vpc"
     tags = {
-      name = "${var.env}--nat-elastic-ip"
+      name = "dev--nat-elastic-ip"
     }
   
 }
@@ -97,7 +97,7 @@ resource "aws_nat_gateway" "this" {
     subnet_id = aws_subnet.public.id
 
     tags = {
-      name = "${var.env}--nat gateway"
+      name = "dev--nat gateway"
    } 
 }
 
@@ -109,7 +109,7 @@ resource "aws_route_table" "private" {
         nat_gateway_id = aws_nat_gateway.this.id  
     }
     tags = {
-        name = "${var.env}--private route table"
+        name = "dev--private route table"
     }
 }
 
